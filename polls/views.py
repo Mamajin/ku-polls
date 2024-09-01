@@ -11,6 +11,11 @@ from .models import Choice, Question
 
 
 class IndexView(generic.ListView):
+    """
+    The IndexView class is a generic ListView that displays a list of the
+    latest five published questions. It uses the “polls/index.html” template
+    to render the index page.
+    """
     template_name = "polls/index.html"
     context_object_name = "latest_question_list"
 
@@ -26,6 +31,12 @@ class IndexView(generic.ListView):
 
 
 class DetailView(generic.DetailView):
+    """
+    The DetailView class is a generic DetailView that allows users to view
+    details of individual questions. It checks if the question is published
+    and if voting is allowed before rendering the “polls/detail.html” template
+    with the relevant data.
+    """
     model = Question
     template_name = "polls/detail.html"
 
@@ -41,11 +52,24 @@ class DetailView(generic.DetailView):
 
 
 class ResultsView(generic.DetailView):
+    """
+    The ResultsView class is another generic DetailView, displaying the
+    results of a specific Question instance. The template used here is
+    “polls/results.html”.
+    """
     model = Question
     template_name = "polls/results.html"
 
 
 def vote(request, question_id):
+    """
+    The vote function handles voting on a particular question. It first fetches
+     the question based on the provided ID. If no valid choice is submitted in
+     the POST request, it returns an error message to the user and redisplay
+     the detail page. Otherwise, it increments the vote count for that chosen
+     option, saves it, and redirects the user to the results page of the
+     questioned they just voted on.
+    """
     question = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST["choice"])

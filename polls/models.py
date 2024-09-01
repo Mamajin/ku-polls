@@ -8,6 +8,15 @@ from django.utils import timezone
 
 
 class Question(models.Model):
+    """
+    The Question model represents a poll question in the system. It contains
+    fields for ‘question_text’, ‘pub_date’ (date published), and ‘end_date’.
+    The was_published_recently method checks if the question has been recently
+    published, while is_published returns True if the current date/time is on
+    or after the publication date. The can_vote method determines if voting is
+    allowed based on the current date/time in relation to the publication and
+    end dates.
+    """
     question_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published', default=timezone.now)
     end_date = models.DateTimeField('end date', null=True, blank=True)
@@ -40,6 +49,11 @@ class Question(models.Model):
 
 
 class Choice(models.Model):
+    """
+    The Choice model represents a choice within a poll. It contains fields for
+    ‘question’ (a foreign key relationship with the Question model),
+    ‘choice_text’, and ‘votes’.
+    """
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
     votes = models.IntegerField(default=0)
