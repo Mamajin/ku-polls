@@ -1,7 +1,8 @@
+from django.contrib import messages
 from django.db.models import F
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
 from django.utils import timezone
 from .models import Choice, Question
@@ -27,6 +28,16 @@ class IndexView(generic.ListView):
 class DetailView(generic.DetailView):
     model = Question
     template_name = "polls/detail.html"
+
+    def get(self, request, *args, **kwargs):
+        question = self.get_object()
+        if not question.is_published():
+            messages.error(request, "This poll is not yet published.")
+            return redirect('polls:index')
+        if not question.can_vote():
+            messages.error(request, "Voting is not allowed for this poll.")
+            return redirect('polls:index')
+        return super().get(request, *args, **kwargs)
 
 
 class ResultsView(generic.DetailView):
