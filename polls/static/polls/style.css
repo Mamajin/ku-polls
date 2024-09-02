@@ -1,9 +1,177 @@
-li a {
-    color: black;
-}
-
+/* General Styles */
 body {
-    background: white url("images/background.jpg") no-repeat;
+    background: white url("images/background.jpg") no-repeat center center fixed;
     background-size: cover;
     font-size: 16px;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    width: 90%;
+    margin: 20px auto;
+}
+
+/* Headings */
+h1, h2, h3 {
+    color: #444;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 2.5em;
+}
+
+h2 {
+    font-size: 2em;
+}
+
+h3 {
+    font-size: 1.75em;
+}
+
+/* Form Styles */
+form {
+    background-color: transparent;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+fieldset {
+    border: none;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+legend {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+input[type="radio"] {
+    margin-right: 10px;
+}
+
+label {
+    font-size: 1em;
+    margin-right: 10px;
+}
+
+/* Button Styles */
+input[type="submit"], button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px;
+    display: block;
+    margin: 20px auto;
+    width: 100%;
+    max-width: 150px;
+    text-align: center;
+}
+
+input[type="submit"]:hover, button:hover {
+    background-color: #45a049;
+}
+
+/* Link Styles */
+a {
+    color: #007BFF;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Messages Block */
+ul.messages {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+ul.messages li {
+    padding: 5px 10px;
+    margin: 5px 0;
+    border-radius: 4px;
+}
+
+ul.messages .error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+ul.messages .success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* List Styles */
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+ul li {
+    background-color: rgba(255, 255, 255, 0.8);
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+ul li:hover {
+    transform: scale(1.02);
+}
+
+li a {
+    color: #333;
+    text-decoration: none;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+li a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+    }
+
+    input[type="submit"], button {
+        width: 100%;
+        max-width: none;
+    }
+
+    h1, h2, h3 {
+        font-size: 1.5em;
+    }
 }
