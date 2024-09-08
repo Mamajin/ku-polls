@@ -6,7 +6,8 @@ from django.urls import reverse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
 from django.utils import timezone
-from .models import Choice, Question
+from .models import Choice, Question, Vote
+
 
 # Create your views here.
 
@@ -73,6 +74,7 @@ def vote(request, question_id):
      questioned they just voted on.
     """
     question = get_object_or_404(Question, pk=question_id)
+
     try:
         selected_choice = question.choice_set.get(pk=request.POST["choice"])
     except (KeyError, Choice.DoesNotExist):
@@ -85,10 +87,26 @@ def vote(request, question_id):
                 "error_message": "You didn't select a choice.",
             },
         )
-    else:
-        selected_choice.votes = F("votes") + 1
-        selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
+    # Reference to the current user
+    this_user = request.user
+    # Get the user's vote
+    try:
+        # vote = this_user.vot_set.get(choice__question=question)
+        vote = Vote.objects.get(user=this_user, choice__question=question)
+        # user has a vote for this question!
+        vote.choice = selected_choice
+        vote.save()
+        messages.success(request, f"Your vote was changed to {selected_choice.choice_text}")
+    except (KeyError, Vote.DoesNotExist):
+         # does not have a vote yet
+        vote = Vote.objects.create(user=this_user, choice=selected_choice)
+        # automatically saved
+        vote.save()
+        messages.success(request, f"You voted for {selected_choice.choice_text}")
+
+    # save the vote
+    selected_choice.save()
+    # Always return an HttpResponseRedirect after successfully dealing
+    # with POST data. This prevents data from being posted twice if a
+    # user hits the Back button.
     return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
