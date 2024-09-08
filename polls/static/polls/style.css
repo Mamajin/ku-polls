@@ -36,6 +36,8 @@ h1 {
 
 h2 {
     font-size: 2em;
+    text-align: center;  /* Centers the text horizontally */
+    margin-top: 20px;    /* Adjust this value to move it down or up */
 }
 
 h3 {

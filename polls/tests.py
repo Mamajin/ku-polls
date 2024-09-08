@@ -1,10 +1,11 @@
 import datetime
 
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
 
-from .models import Question
+from .models import Question, Choice, Vote
 
 
 class QuestionModelTests(TestCase):
@@ -163,3 +164,76 @@ class QuestionDetailViewTests(TestCase):
         self.assertContains(response, past_question.question_text)
 
 
+class ChoiceModelTests(TestCase):
+    def test_choice_str(self):
+        """
+        The __str__() method of the Choice model should return the choice_text.
+        """
+        question = create_question(question_text="Test question.", days=-1)
+        choice = Choice.objects.create(question=question,
+                                       choice_text="Test choice.")
+        self.assertEqual(str(choice), "Test choice")
+
+    def test_choice_votes_count(self):
+        """
+        The votes property should correctly count the number of votes for a choice.
+        """
+        question = create_question(question_text="Test question.", days=-1)
+        choice = Choice.objects.create(question=question,
+                                       choice_text="Test choice.")
+        user1 = User.objects.create_user(username='user1', password='password')
+        user2 = User.objects.create_user(username='user2', password='password')
+
+        Vote.objects.create(choice=choice, user=user1)
+        Vote.objects.create(choice=choice, user=user2)
+
+        self.assertEqual(choice.votes, 2)
+
+
+class VoteModelTests(TestCase):
+    def test_vote_creation(self):
+        """
+        Test that a vote can be created and is associated with the correct choice and user.
+        """
+        question = create_question(question_text="Test question.", days=-1)
+        choice = Choice.objects.create(question=question,
+                                       choice_text="Test choice.")
+        user = User.objects.create_user(username='user', password='password')
+
+        vote = Vote.objects.create(choice=choice, user=user)
+
+        self.assertEqual(vote.choice, choice)
+        self.assertEqual(vote.user, user)
+
+    def test_multiple_votes_by_same_user(self):
+        """
+        A user should not be able to vote multiple times for the same choice in a poll.
+        """
+        question = create_question(question_text="Test question.", days=-1)
+        choice = Choice.objects.create(question=question,
+                                       choice_text="Test choice.")
+        user = User.objects.create_user(username='user', password='password')
+
+        Vote.objects.create(choice=choice, user=user)
+        with self.assertRaises(Exception):
+            Vote.objects.create(choice=choice, user=user)
+
+    def test_votes_for_multiple_choices(self):
+        """
+        A user should be able to vote for different choices in different polls.
+        """
+        question1 = create_question(question_text="Test question 1.", days=-1)
+        choice1 = Choice.objects.create(question=question1,
+                                        choice_text="Test choice 1.")
+
+        question2 = create_question(question_text="Test question 2.", days=-1)
+        choice2 = Choice.objects.create(question=question2,
+                                        choice_text="Test choice 2.")
+
+        user = User.objects.create_user(username='user', password='password')
+
+        vote1 = Vote.objects.create(choice=choice1, user=user)
+        vote2 = Vote.objects.create(choice=choice2, user=user)
+
+        self.assertEqual(vote1.choice, choice1)
+        self.assertEqual(vote2.choice, choice2)
