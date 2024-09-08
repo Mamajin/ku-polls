@@ -43,14 +43,32 @@ class DetailView(generic.DetailView):
     template_name = "polls/detail.html"
 
     def get(self, request, *args, **kwargs):
-        question = self.get_object()
+        # First, retrieve the object by calling the parent class's get method
+        self.object = self.get_object()
+        question = self.object  # Now, 'question' is the retrieved object
+
+        # Check if the poll is published
         if not question.is_published():
             messages.error(request, "This poll is not yet published.")
             return redirect('polls:index')
+
+        # Check if voting is allowed for the poll
         if not question.can_vote():
             messages.error(request, "Voting is not allowed for this poll.")
             return redirect('polls:index')
-        return super().get(request, *args, **kwargs)
+
+        # Attempt to retrieve the user's previous vote if authenticated
+        user_vote = None
+        if request.user.is_authenticated:
+            try:
+                user_vote = Vote.objects.get(user=request.user,
+                                             choice__question=question).choice.id
+            except Vote.DoesNotExist:
+                user_vote = None
+
+        # Call super().get_context_data() to properly initialize context
+        context = self.get_context_data(object=question, user_vote=user_vote)
+        return self.render_to_response(context)
 
 
 class ResultsView(generic.DetailView):
