@@ -25,4 +25,6 @@ urlpatterns = [
     path('polls/', include('polls.urls')),
     # Admin URL
     path('admin/', admin.site.urls),
+    # authentication backend
+    path('accounts/', include('django.contrib.auth.urls')),
 ]
