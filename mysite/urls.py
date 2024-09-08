@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from django.views.generic.base import RedirectView
-import views
+from mysite import views
 
 urlpatterns = [
     # Redirect base URL to polls index page

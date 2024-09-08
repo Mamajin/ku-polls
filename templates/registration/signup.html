@@ -1,10 +1,12 @@
-<h2>Register</h2>
+{% load static %}
+<link rel="stylesheet" href="{% static 'polls/style.css' %}">
+
 <form method="POST">
     {% csrf_token %}
     <table style="padding: 2ex;">
     {{ form.as_table }}     {# this line shows the sign-up form #}
     <tr>
-    <td colspan="2">
+    <td colspan="3">
     <button type="submit">Register</button>
     </td>
     </tr>
