@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from django.views.generic.base import RedirectView
+import views
 
 urlpatterns = [
     # Redirect base URL to polls index page
@@ -27,4 +28,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # authentication backend
     path('accounts/', include('django.contrib.auth.urls')),
+    # sign up page
+    path('signup/', views.signup, name='signup'),
 ]
