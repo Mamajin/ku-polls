@@ -27,6 +27,51 @@
   }
 },
 {
+  "model": "polls.question",
+  "pk": 5,
+  "fields": {
+    "question_text": "What is your favorite type of exercise?",
+    "pub_date": "2024-09-09T03:29:27Z",
+    "end_date": null
+  }
+},
+{
+  "model": "polls.question",
+  "pk": 6,
+  "fields": {
+    "question_text": "Which gaming genre do you enjoy the most?",
+    "pub_date": "2024-09-09T03:32:30Z",
+    "end_date": null
+  }
+},
+{
+  "model": "polls.question",
+  "pk": 7,
+  "fields": {
+    "question_text": "What type of books do you prefer to read?",
+    "pub_date": "2024-09-09T03:33:05Z",
+    "end_date": null
+  }
+},
+{
+  "model": "polls.question",
+  "pk": 8,
+  "fields": {
+    "question_text": "How often do you cook at home?",
+    "pub_date": "2024-09-09T03:33:17Z",
+    "end_date": null
+  }
+},
+{
+  "model": "polls.question",
+  "pk": 9,
+  "fields": {
+    "question_text": "What is your preferred type of vacation?",
+    "pub_date": "2024-09-09T03:33:27Z",
+    "end_date": null
+  }
+},
+{
   "model": "polls.choice",
   "pk": 5,
   "fields": {
@@ -115,10 +160,210 @@
   }
 },
 {
+  "model": "polls.choice",
+  "pk": 16,
+  "fields": {
+    "question": 5,
+    "choice_text": "Running or Jogging"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 17,
+  "fields": {
+    "question": 5,
+    "choice_text": "Weightlifting"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 18,
+  "fields": {
+    "question": 5,
+    "choice_text": "Yoga or Pilates"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 19,
+  "fields": {
+    "question": 5,
+    "choice_text": "Swimming"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 20,
+  "fields": {
+    "question": 5,
+    "choice_text": "Cycling"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 21,
+  "fields": {
+    "question": 6,
+    "choice_text": "Action/Adventure"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 22,
+  "fields": {
+    "question": 6,
+    "choice_text": "Role-Playing Games (RPGs)"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 23,
+  "fields": {
+    "question": 6,
+    "choice_text": "First-Person Shooters (FPS)"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 24,
+  "fields": {
+    "question": 6,
+    "choice_text": "Strategy Games"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 25,
+  "fields": {
+    "question": 6,
+    "choice_text": "Sports Games"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 26,
+  "fields": {
+    "question": 7,
+    "choice_text": "Fiction (Novels, Short Stories)"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 27,
+  "fields": {
+    "question": 7,
+    "choice_text": "Non-fiction (Biographies, History)"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 28,
+  "fields": {
+    "question": 7,
+    "choice_text": "Science Fiction/Fantasy"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 29,
+  "fields": {
+    "question": 7,
+    "choice_text": "Mystery/Thriller"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 30,
+  "fields": {
+    "question": 7,
+    "choice_text": "Self-Help/Motivational"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 31,
+  "fields": {
+    "question": 8,
+    "choice_text": "Every day"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 32,
+  "fields": {
+    "question": 8,
+    "choice_text": "A few times a week"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 33,
+  "fields": {
+    "question": 8,
+    "choice_text": "Once a week"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 34,
+  "fields": {
+    "question": 8,
+    "choice_text": "Rarely"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 35,
+  "fields": {
+    "question": 8,
+    "choice_text": "Never"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 36,
+  "fields": {
+    "question": 9,
+    "choice_text": "Beach getaway"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 37,
+  "fields": {
+    "question": 9,
+    "choice_text": "Adventure/Outdoor activities"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 38,
+  "fields": {
+    "question": 9,
+    "choice_text": "Cultural exploration (museums, historical sites)"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 39,
+  "fields": {
+    "question": 9,
+    "choice_text": "Relaxing in a luxury resort"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 40,
+  "fields": {
+    "question": 9,
+    "choice_text": "City sightseeing and shopping"
+  }
+},
+{
   "model": "polls.vote",
   "pk": 1,
   "fields": {
-    "choice": 13,
+    "choice": 14,
     "user": 2
   }
 }
