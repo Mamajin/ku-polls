@@ -1,12 +1,15 @@
 from django.contrib import messages
+from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
-from django.db.models import F
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
 from django.utils import timezone
 from .models import Choice, Question, Vote
+from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth import logout as auth_logout
+import logging
 
 
 # Create your views here.
@@ -69,6 +72,9 @@ class DetailView(generic.DetailView):
         return self.render_to_response(context)
 
 
+logger = logging.getLogger('polls')
+
+
 class ResultsView(generic.DetailView):
     """
     The ResultsView class is another generic DetailView, displaying the
@@ -91,9 +97,20 @@ def vote(request, question_id):
     """
     question = get_object_or_404(Question, pk=question_id)
 
+    if not question.can_vote():
+        logger.warning(f"User {request.user.username} "
+                       f"Attempted to vote in a closed poll {question_id}")
+        return render(request, 'polls/detail.html', {
+            'question': question,
+            'error_message': "You can not vote in this poll."
+        })
+
     try:
         selected_choice = question.choice_set.get(pk=request.POST["choice"])
     except (KeyError, Choice.DoesNotExist):
+        logger.warning(
+            f"User {request.user.username} "
+            f"Failed to select a choice for question {question_id}")
         # Redisplay the question voting form.
         return render(
             request,
@@ -107,18 +124,27 @@ def vote(request, question_id):
     this_user = request.user
     # Get the user's vote
     try:
-        # vote = this_user.vot_set.get(choice__question=question)
         vote = Vote.objects.get(user=this_user, choice__question=question)
         # user has a vote for this question!
         vote.choice = selected_choice
         vote.save()
-        messages.success(request, f"Your vote was changed to {selected_choice.choice_text}")
+        logger.info(
+            f"User {this_user.username} changed their vote to choice {selected_choice.choice_text}"
+            f" for question {question_id}")
+        messages.success(request, f"Your vote was updated to "
+                                  f"'{selected_choice.choice_text}'")
+        messages.success(request,
+                         f"Your vote was changed to {selected_choice.choice_text}")
     except (KeyError, Vote.DoesNotExist):
-         # does not have a vote yet
+        # does not have a vote yet
         vote = Vote.objects.create(user=this_user, choice=selected_choice)
         # automatically saved
         vote.save()
-        messages.success(request, f"You voted for {selected_choice.choice_text}")
+        logger.info(
+            f"User {this_user.username} voted for choice {selected_choice.choice_text}"
+            f" for question {question_id}")
+        messages.success(request,
+                         f"You voted for {selected_choice.choice_text}")
 
     # save the vote
     selected_choice.save()
@@ -128,4 +154,26 @@ def vote(request, question_id):
     return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
 
 
+def login(request):
+    """Handle user login."""
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            auth_login(request, user)
+            ip_addr = request.META.get('REMOTE_ADDR')
+            logger.info(f"User {username} logged in from {ip_addr}")
+            return redirect('polls:index')
+        else:
+            ip_addr = request.META.get('REMOTE_ADDR')
+            logger.warning(f"Failed login attempt for {username} from {ip_addr}")
+    return render(request, 'login.html')
 
+
+def logout(request):
+    """Handle user logout."""
+    ip_addr = request.META.get('REMOTE_ADDR')
+    logger.info(f"User {request.user.username} logged out from {ip_addr}")
+    auth_logout(request)
+    return redirect('polls:index')
