@@ -155,7 +155,9 @@ def vote(request, question_id):
 
 
 def login(request):
-    """Handle user login."""
+    """
+    Handle user login.
+    """
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -172,7 +174,9 @@ def login(request):
 
 
 def logout(request):
-    """Handle user logout."""
+    """
+    Handle user logout.
+    """
     ip_addr = request.META.get('REMOTE_ADDR')
     logger.info(f"User {request.user.username} logged out from {ip_addr}")
     auth_logout(request)
