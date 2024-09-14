@@ -29,8 +29,7 @@ class IndexView(generic.ListView):
         Return the last five published questions (not including those set to be
         published in the future).
         """
-        return Question.objects.filter(pub_date__lte=timezone.now()).order_by(
-            "-pub_date")
+        return Question.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")
 
 
 class DetailView(generic.DetailView):
@@ -62,8 +61,7 @@ class DetailView(generic.DetailView):
         user_vote = None
         if request.user.is_authenticated:
             try:
-                user_vote = Vote.objects.get(user=request.user,
-                                             choice__question=question).choice.id
+                user_vote = Vote.objects.get(user=request.user, choice__question=question).choice.id
             except Vote.DoesNotExist:
                 user_vote = None
 
@@ -89,28 +87,25 @@ class ResultsView(generic.DetailView):
 def vote(request, question_id):
     """
     The vote function handles voting on a particular question. It first fetches
-     the question based on the provided ID. If no valid choice is submitted in
-     the POST request, it returns an error message to the user and redisplay
-     the detail page. Otherwise, it increments the vote count for that chosen
-     option, saves it, and redirects the user to the results page of the
-     questioned they just voted on.
+    the question based on the provided ID. If no valid choice is submitted in
+    the POST request, it returns an error message to the user and redisplays
+    the detail page. Otherwise, it increments the vote count for that chosen
+    option, saves it, and redirects the user to the results page of the
+    question they just voted on.
     """
     question = get_object_or_404(Question, pk=question_id)
 
     if not question.can_vote():
-        logger.warning(f"User {request.user.username} "
-                       f"Attempted to vote in a closed poll {question_id}")
+        logger.warning(f"User {request.user.username} attempted to vote in a closed poll {question_id}")
         return render(request, 'polls/detail.html', {
             'question': question,
-            'error_message': "You can not vote in this poll."
+            'error_message': "You cannot vote in this poll."
         })
 
     try:
         selected_choice = question.choice_set.get(pk=request.POST["choice"])
     except (KeyError, Choice.DoesNotExist):
-        logger.warning(
-            f"User {request.user.username} "
-            f"Failed to select a choice for question {question_id}")
+        logger.warning(f"User {request.user.username} failed to select a choice for question {question_id}")
         # Redisplay the question voting form.
         return render(
             request,
@@ -120,37 +115,23 @@ def vote(request, question_id):
                 "error_message": "You didn't select a choice.",
             },
         )
-    # Reference to the current user
+
     this_user = request.user
-    # Get the user's vote
     try:
+        # Check if the user already has a vote
         vote = Vote.objects.get(user=this_user, choice__question=question)
-        # user has a vote for this question!
+        # If they do, update their vote
         vote.choice = selected_choice
         vote.save()
-        logger.info(
-            f"User {this_user.username} changed their vote to choice {selected_choice.choice_text}"
-            f" for question {question_id}")
-        messages.success(request, f"Your vote was updated to "
-                                  f"'{selected_choice.choice_text}'")
-        messages.success(request,
-                         f"Your vote was changed to {selected_choice.choice_text}")
-    except (KeyError, Vote.DoesNotExist):
-        # does not have a vote yet
+        logger.info(f"User {this_user.username} changed their vote to choice {selected_choice.choice_text} for question {question_id}")
+        messages.success(request, f"Your vote was updated to '{selected_choice.choice_text}'")
+    except Vote.DoesNotExist:
+        # If they don't have a vote yet, create a new one
         vote = Vote.objects.create(user=this_user, choice=selected_choice)
-        # automatically saved
-        vote.save()
-        logger.info(
-            f"User {this_user.username} voted for choice {selected_choice.choice_text}"
-            f" for question {question_id}")
-        messages.success(request,
-                         f"You voted for {selected_choice.choice_text}")
+        logger.info(f"User {this_user.username} voted for choice {selected_choice.choice_text} for question {question_id}")
+        messages.success(request, f"You voted for '{selected_choice.choice_text}'")
 
-    # save the vote
-    selected_choice.save()
-    # Always return an HttpResponseRedirect after successfully dealing
-    # with POST data. This prevents data from being posted twice if a
-    # user hits the Back button.
+    # Redirect to the results page
     return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
 
 
