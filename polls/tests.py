@@ -5,7 +5,7 @@ from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
 
-from .models import Question, Choice, Vote
+from polls.models import Question, Choice, Vote
 
 
 class QuestionModelTests(TestCase):
