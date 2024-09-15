@@ -3,11 +3,20 @@
 
 <h1>{{ question.question_text }}</h1>
 
-<ul>
+<ul style="margin-left: 25px;">
 {% for choice in question.choice_set.all %}
     <li>{{ choice.choice_text }} - {{ choice.votes }}</li>
 {% endfor %}
 </ul>
+
+<footer>
+    {% if user.is_authenticated %}
+    <form action="{% url 'logout' %}" method="post" class="logout-button">
+        {% csrf_token %}
+        <button type="submit">Log Out</button>
+    </form>
+    {% endif %}
+</footer>
 
 <!-- Navigation Link -->
 <p><a href="{% url 'polls:index' %}">Back to List of Polls</a></p>
