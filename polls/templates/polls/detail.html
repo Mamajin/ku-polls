@@ -6,37 +6,44 @@
 
     <!-- Messages block -->
     {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
     {% endif %}
 
     <fieldset>
         <legend><h1>{{ question.question_text }}</h1></legend>
         {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+        <!-- Poll choices -->
         {% for choice in question.choice_set.all %}
             <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}"
                 {% if user_vote == choice.id %}checked{% endif %}>
             <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
         {% endfor %}
     </fieldset>
-    <input type="submit" value="Vote">
-    <footer>
-        {% if user.is_authenticated %}
-        <form action="{% url 'logout' %}" method="post" class="logout-button">
-            {% csrf_token %}
-            <button type="submit">Log Out</button>
-        </form>
-        {% endif %}
-    </footer>
+
+    <!-- If the user is not authenticated, disable the vote button and prompt for login -->
+    {% if user.is_authenticated %}
+        <input type="submit" value="Vote">
+    {% else %}
+        <input type="submit" value="Login to Vote" disabled>
+        <p>Please <a href="{% url 'login' %}?next={{ request.path }}">login</a> to vote.</p>
+    {% endif %}
+
+    <!-- Navigation Links -->
+    <p><a href="{% url 'polls:index' %}">Back to List of Polls</a></p>
+    <p style="margin-left: 25px;"><a href="{% url 'polls:results' question.id %}">View Results</a></p>
+
+    <!-- Logout button for authenticated users -->
+    {% if user.is_authenticated %}
+        <footer>
+            <form action="{% url 'logout' %}" method="post" class="logout-button">
+                {% csrf_token %}
+                <button type="submit">Log Out</button>
+            </form>
+        </footer>
+    {% endif %}
 </form>
-
-<!-- Navigation Links -->
-<p><a href="{% url 'polls:index' %}">Back to List of Polls</a></p>
-<p style="margin-left: 25px;"><a href="{% url 'polls:results' question.id %}">View Results</a></p>
-
-
-
-

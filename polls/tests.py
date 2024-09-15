@@ -1,10 +1,9 @@
 import datetime
-
 from django.contrib.auth.models import User
+from django.db import IntegrityError
 from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
-
 from polls.models import Question, Choice, Vote
 
 
@@ -32,7 +31,7 @@ class QuestionModelTests(TestCase):
         is_published() should return True for questions whose pub_date
         is now (default).
         """
-        question = Question()
+        question = Question(pub_date=timezone.now())
         self.assertIs(question.is_published(), True)
 
     def test_is_published_with_past_pub_date(self):
@@ -215,7 +214,7 @@ class VoteModelTests(TestCase):
         user = User.objects.create_user(username='user', password='password')
 
         Vote.objects.create(choice=choice, user=user)
-        with self.assertRaises(Exception):
+        with self.assertRaises(IntegrityError):
             Vote.objects.create(choice=choice, user=user)
 
     def test_votes_for_multiple_choices(self):
