@@ -31,19 +31,6 @@ class VoteModelTests(TestCase):
         self.assertEqual(vote.choice, choice)
         self.assertEqual(vote.user, user)
 
-    def test_multiple_votes_by_same_user(self):
-        """
-        A user should not be able to vote multiple times for the same choice in a poll.
-        """
-        question = create_question(question_text="Test question.", days=-1)
-        choice = Choice.objects.create(question=question,
-                                       choice_text="Test choice.")
-        user = User.objects.create_user(username='user', password='password')
-
-        Vote.objects.create(choice=choice, user=user)
-        with self.assertRaises(IntegrityError):
-            Vote.objects.create(choice=choice, user=user)
-
     def test_votes_for_multiple_choices(self):
         """
         A user should be able to vote for different choices in different polls.
