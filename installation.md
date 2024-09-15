@@ -4,7 +4,7 @@
 
 2. Clone this repository
     ```commandline
-    git clone <repository link>
+    git clone https://github.com/Mamajin/ku-polls.git
     ```
 
 3. Change directory to ku-polls
@@ -37,3 +37,14 @@
     ```commandline
     python manage.py migrate
     ```
+
+8. Load data
+   ```commandline
+   python manage.py loaddata data/users.json
+   python manage.py loaddata data/polls-v4.json
+   python manage.py loaddata data/votes-v4.json
+   ```
+9. Runserver
+   ```commandline
+   python manage.py runserver
+   ```
