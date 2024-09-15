@@ -3,35 +3,53 @@
 
 <body>
     <div class="container">
+        <!-- Welcome message for authenticated users -->
         {% if user.is_authenticated %}
             Welcome back to KU Polls, {{ user.username }}
-            <!-- Messages block -->
-            {% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
+        {% else %}
+            Welcome to KU Polls! Please <a href="{% url 'login' %}?next={{request.path}}">Login</a> to vote.
+        {% endif %}
 
-            {% if latest_question_list %}
-                <ul>
+        <!-- Messages block -->
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <!-- Poll questions list -->
+        {% if latest_question_list %}
+            <ul>
                 {% for question in latest_question_list %}
-                    <li>
-                        <a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a>
-                        | <a href="{% url 'polls:results' question.id %}">Results</a>
+                    <li style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a>
+                            | <a href="{% url 'polls:results' question.id %}">Results</a>
+                        </div>
+                        <span class="status">
+                            {% if question.can_vote %}
+                                Open
+                            {% else %}
+                                Closed
+                            {% endif %}
+                        </span>
                     </li>
                 {% endfor %}
-                </ul>
-            {% else %}
-                <p>No polls are available.</p>
-            {% endif %}
+            </ul>
         {% else %}
-            Please <a href="{% url 'login' %}?next={{request.path}}">Login</a>
+            <p>No polls are available.</p>
         {% endif %}
-        <form action="{% url 'logout' %}" method="post">
-       {% csrf_token %}
-      <button type="submit">Log Out</button>
-</form>
+
+        <!-- Logout button for authenticated users -->
+        {% if user.is_authenticated %}
+            <footer>
+                <form action="{% url 'logout' %}" method="post" class="logout-button">
+                    {% csrf_token %}
+                    <button type="submit">Log Out</button>
+                </form>
+            </footer>
+        {% endif %}
     </div>
 </body>

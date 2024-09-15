@@ -177,3 +177,12 @@ li a:hover {
         font-size: 1.5em;
     }
 }
+
+.status {
+    font-weight: bold;
+    color: green;
+}
+
+.status.closed {
+    color: red;
+}
