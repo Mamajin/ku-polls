@@ -17,9 +17,18 @@
             {% if latest_question_list %}
                 <ul>
                 {% for question in latest_question_list %}
-                    <li>
-                        <a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a>
-                        | <a href="{% url 'polls:results' question.id %}">Results</a>
+                    <li style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a>
+                            | <a href="{% url 'polls:results' question.id %}">Results</a>
+                        </div>
+                        <span class="status">
+                            {% if question.can_vote %}
+                                Open
+                            {% else %}
+                                Closed
+                            {% endif %}
+                        </span>
                     </li>
                 {% endfor %}
                 </ul>

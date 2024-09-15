@@ -27,6 +27,13 @@ All project documents are in the [Project Wiki](../../wiki/Home).
 - [Iteration 1](../../wiki/Iteration%201)
 - [Iteration 2](../../wiki/Iteration%202)
 
+## Demo user
+| User  | Password |
+|-------|----------|
+| demo1 | hackme11 |
+| demo2 | hackme22 |
+| demo3 | hackme33 |
+
 ## Running the Application
 
 1. Load poll data from a file
