@@ -1,0 +1,28 @@
+[run]
+# measure branch coverage
+branch = True
+# don't measure python standard library (this should be the default)
+cover_pylib = False
+# omit uninteresting stuff
+omit =
+    __init__.py
+    /usr/*           # Linux location of Python libraries
+    mysite/*         # application configuration files
+    data/*           # omit migrations
+    tests/*          # omit unit test files and directories
+    migrations/*     # omit __init__.py files
+    static/*         # omit static
+    templates/*      # omit
+    staticfiles/*
+    admin.py
+    apps.py
+    urls.py
+# explicitly include the main app
+include =
+    polls/*.py
+
+# in the report, exclude some methods we don't need to test
+[report]
+exclude_lines =
+    def __str__    # example
+    def __repr__   # example
