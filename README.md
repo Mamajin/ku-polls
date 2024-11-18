@@ -26,6 +26,8 @@ All project documents are in the [Project Wiki](../../wiki/Home).
 - [Project Plan](../../wiki/Project%20Plan)
 - [Iteration 1](../../wiki/Iteration%201)
 - [Iteration 2](../../wiki/Iteration%202)
+- [Iteration 3](../../wiki/Iteration%203)
+- [Iteration 4](../../wiki/Iteration%204)
 
 ## Demo user
 | User  | Password |
